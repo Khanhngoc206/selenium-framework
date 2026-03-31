@@ -29,6 +29,9 @@ jobs:
 
       - name: Chạy test (${{ matrix.browser }})
         run: mvn clean test -Dbrowser=${{ matrix.browser }} -DsuiteXmlFile=testng-smoke.xml
+        env:
+             APP_USERNAME: ${{ secrets.SAUCEDEMO_USERNAME }}
+             APP_PASSWORD: ${{ secrets.SAUCEDEMO_PASSWORD }}
 
       - name: Lưu kết quả
         if: always()

@@ -1,8 +1,7 @@
 package framework.base;
 
-import framework.config.ConfigReader;
-import framework.driver.DriverFactory;
-import framework.utils.ScreenshotUtil;
+import java.time.Duration;
+
 import org.openqa.selenium.WebDriver;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
@@ -10,7 +9,9 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 
-import java.time.Duration;
+import framework.config.ConfigReader;
+import framework.driver.DriverFactory;
+import framework.utils.ScreenshotUtil;
 
 public abstract class BaseTest {
 
@@ -30,7 +31,6 @@ public abstract class BaseTest {
         WebDriver driver = DriverFactory.createDriver(browser);
         tlDriver.set(driver);
 
-        getDriver().manage().window().maximize();
         getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
         getDriver().get(ConfigReader.getInstance().getBaseUrl());
     }

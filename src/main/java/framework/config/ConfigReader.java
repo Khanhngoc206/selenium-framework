@@ -5,19 +5,16 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class ConfigReader {
-
-    private static final Properties props = new Properties();
     private static ConfigReader instance;
+    private Properties properties;
 
     private ConfigReader() {
-        String env = System.getProperty("env", "dev");
-        String file = "src/test/resources/config-" + env + ".properties";
-
-        try (FileInputStream fis = new FileInputStream(file)) {
-            props.load(fis);
-            System.out.println("[ConfigReader] Dang dung moi truong: " + env);
+        properties = new Properties();
+        try {
+            FileInputStream fis = new FileInputStream("src/main/resources/config.properties");
+            properties.load(fis);
         } catch (IOException e) {
-            throw new RuntimeException("Khong tim thay config: " + file, e);
+            e.printStackTrace();
         }
     }
 
@@ -28,15 +25,31 @@ public class ConfigReader {
         return instance;
     }
 
+    public String getProperty(String key) {
+        return properties.getProperty(key);
+    }
+
     public String getBaseUrl() {
-        return props.getProperty("base.url");
+        String baseUrl = System.getenv("BASE_URL");
+        if (baseUrl == null || baseUrl.isBlank()) {
+            baseUrl = getProperty("base.url");
+        }
+        return baseUrl;
     }
 
-    public int getImplicitWait() {
-        return Integer.parseInt(props.getProperty("implicit.wait", "5"));
+    public String getUsername() {
+        String username = System.getenv("APP_USERNAME");
+        if (username == null || username.isBlank()) {
+            username = getProperty("app.username");
+        }
+        return username;
     }
 
-    public String getScreenshotPath() {
-        return props.getProperty("screenshot.path", "target/screenshots/");
+    public String getPassword() {
+        String password = System.getenv("APP_PASSWORD");
+        if (password == null || password.isBlank()) {
+            password = getProperty("app.password");
+        }
+        return password;
     }
 }
